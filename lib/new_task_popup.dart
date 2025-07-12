@@ -68,7 +68,7 @@ class _NewTaskPopupState extends State<NewTaskPopup> {
         ),
         widget.actionBtn(
           handlePress: () => {
-            if (newTask['title'] != '')
+            if (newTask['title'].trim() != '')
               {tasksProvider.addTask(context, newTask)},
             Navigator.pop(context),
           },

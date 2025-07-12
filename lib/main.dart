@@ -37,6 +37,8 @@ class TasksNotifier extends ChangeNotifier {
   static final Future<SharedPreferences> pref = SharedPreferences.getInstance();
 
   Task addTask(BuildContext context, Task newTask) {
+    newTask['title'] = newTask['title'].trim();
+    newTask['description'] = newTask['description'].trim();
     _tasks.add(newTask);
     notifyListeners();
     setTasksToSharedPref(context);

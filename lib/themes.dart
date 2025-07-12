@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 
 final lightTheme = ThemeData(
   colorSchemeSeed: Colors.green,
-  scaffoldBackgroundColor: Color(0xffDEFFFC),
+  scaffoldBackgroundColor: Color(0xffD6F49D),
   appBarTheme: AppBarTheme(
-    backgroundColor: Color(0xffDEFFFC),
-    shadowColor: Color(0xffDEFFFC),
-    surfaceTintColor: Color(0xffDEFFFC),
+    backgroundColor: Color(0xffD6F49D),
+    shadowColor: Color(0xffD6F49D),
+    surfaceTintColor: Color(0xffD6F49D),
   ),
-  dialogTheme: DialogThemeData(
-    backgroundColor: Color.fromARGB(255, 188, 226, 223),
-  ),
+  dialogTheme: DialogThemeData(backgroundColor: Color(0xffD6F49D)),
 );
