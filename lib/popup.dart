@@ -8,7 +8,7 @@ mixin Popup {
         style ??
         TextStyle(
           fontSize: 16,
-          color: Colors.deepOrange[300],
+          color: Colors.deepOrange[600],
           fontWeight: FontWeight.bold,
         ),
   );
@@ -136,7 +136,9 @@ mixin Popup {
     required List<Widget> actions,
   }) {
     return SimpleDialog(
-      title: Center(child: Text(popupTitle)),
+      title: Center(
+        child: Text(popupTitle, style: TextStyle(color: Colors.green[600])),
+      ),
       titleTextStyle: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 22,

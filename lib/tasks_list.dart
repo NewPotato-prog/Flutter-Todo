@@ -30,7 +30,7 @@ class _TasksListState extends State<TasksList> {
     final tasks = results.isEmpty ? tasksProvider.tasks : results;
 
     return ListView.separated(
-      separatorBuilder: (context, index) => Divider(),
+      separatorBuilder: (context, index) => Divider(color: Colors.green[800]),
       itemCount: tasks.length,
       itemBuilder: (BuildContext context, int index) {
         final task = tasks[index];
