@@ -16,7 +16,6 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
-      darkTheme: darkTheme,
       home: ChangeNotifierProvider(
         create: (context) => TasksNotifier(),
         builder: (context, child) => Consumer<TasksNotifier>(

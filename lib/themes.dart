@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-final lightTheme = ThemeData(colorSchemeSeed: Color(0xFF0E1C36));
-
-final darkTheme = ThemeData(
+final lightTheme = ThemeData(
   colorSchemeSeed: Colors.green,
   scaffoldBackgroundColor: Color(0xffDEFFFC),
   appBarTheme: AppBarTheme(
