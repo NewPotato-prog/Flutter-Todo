@@ -81,7 +81,6 @@ class _TasksListState extends State<TasksList> {
                       Text(task['date'], style: TextStyle(fontSize: 12)),
                     ],
                   ),
-                  FractionallySizedBox(),
                   Row(
                     spacing: 5,
                     children: [

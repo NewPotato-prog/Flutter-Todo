@@ -119,7 +119,7 @@ class _ViewTaskPopupState extends State<ViewTaskPopup> {
               : task['description'],
           isEditing: isEditing,
         ),
-        widget.textContainer(title: 'Created at', content: task['date']),
+        widget.textContainer(title: 'Created At', content: task['date']),
       ],
 
       actions: isEditing.value ? editActionBtn : viewActionBtn,
