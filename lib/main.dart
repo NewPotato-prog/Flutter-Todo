@@ -47,7 +47,7 @@ class TasksNotifier extends ChangeNotifier {
 
   Task createNewTask() {
     final String date = DateFormat(
-      'EEE, MMM d \'at\' h\':\'m a',
+      'EEE, MMM d \'at\' h\':\'mm a',
     ).format(DateTime.now());
     final newTask = {
       'id': UuidV1().generate(),
