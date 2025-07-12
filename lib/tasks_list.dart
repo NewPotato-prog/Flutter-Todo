@@ -52,45 +52,70 @@ class _TasksListState extends State<TasksList> {
               ),
             },
             child: Row(
-              spacing: 10,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        task['title'],
-                        overflow: TextOverflow.fade,
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w500,
-                          color: isCompleted
-                              ? Colors.black54
-                              : Colors.blueAccent,
-                          decoration: isCompleted
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      task['title'],
+                      overflow: TextOverflow.fade,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: isCompleted
+                            ? Colors.black54
+                            : Colors.deepOrange[500],
+                        decoration: isCompleted
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                      ),
+                    ),
+                    Text(task['date'], style: TextStyle(fontSize: 12)),
+                  ],
+                ),
+                FractionallySizedBox(),
+
+                Row(
+                  spacing: 5,
+                  children: [
+                    TextButton(
+                      onPressed: () => tasksProvider.markCompleted(
+                        context,
+                        task['id'],
+                        isCompleted,
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                          isCompleted ? Colors.green : Colors.orange,
                         ),
                       ),
-                      Text(task['date']),
-                    ],
-                  ),
-                ),
-
-                TextButton(
-                  onPressed: () =>
-                      tasksProvider.toggleCompleted(context, task['id']),
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(
-                      isCompleted ? Colors.green : Colors.orangeAccent,
+                      child: Text(
+                        isCompleted ? 'Completed' : 'Pending',
+                        style: TextStyle(color: Colors.white, fontSize: 10),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    isCompleted ? 'Completed' : 'Pending',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                    isCompleted
+                        ? TextButton(
+                            onPressed: () =>
+                                tasksProvider.removeTask(context, task['id']),
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(
+                                Colors.deepOrange,
+                              ),
+                            ),
+                            child: Text(
+                              'Delete',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
+                            ),
+                          )
+                        : Container(),
+                    Icon(Icons.arrow_right_outlined),
+                  ],
                 ),
-                Icon(Icons.arrow_right_outlined),
               ],
             ),
           ),

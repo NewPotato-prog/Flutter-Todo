@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:collection';
+import 'package:todo_app/confirm_popup.dart';
+import 'package:todo_app/themes.dart';
 import 'package:uuid/v1.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   runApp(
     MaterialApp(
-      theme: ThemeData(),
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme,
+      darkTheme: darkTheme,
       home: ChangeNotifierProvider(
         create: (context) => TasksNotifier(),
         builder: (context, child) => Consumer<TasksNotifier>(
@@ -54,14 +58,24 @@ class TasksNotifier extends ChangeNotifier {
     return newTask;
   }
 
-  // Mainly used by [getTasksFromSharedPref]
+  /* Mainly used by [getTasksFromSharedPref] */
   void replaceAllTasks(Tasks tasks) {
     _tasks.clear();
     _tasks.addAll(tasks);
     notifyListeners();
   }
 
-  void removeTask(BuildContext context, String id) {
+  void removeTask(BuildContext context, String id) async {
+    // Add conformation popup, will return true if confirmed
+    /*     final confirm = await showDialog(
+      context: context,
+      builder: (context) => ConfirmPopup(),
+    );
+    if (confirm) {
+      _tasks.removeWhere((task) => task['id'] == id);
+      notifyListeners();
+      if (context.mounted) setTasksToSharedPref(context);
+    } */
     _tasks.removeWhere((task) => task['id'] == id);
     notifyListeners();
     setTasksToSharedPref(context);
@@ -77,14 +91,29 @@ class TasksNotifier extends ChangeNotifier {
     setTasksToSharedPref(context);
   }
 
-  void toggleCompleted(BuildContext context, String id) {
-    for (Task task in _tasks) {
-      if (task['id'] == id) {
-        task['isCompleted'] = !task['isCompleted'];
+  Future<bool> markCompleted(
+    BuildContext context,
+    String id,
+    bool isCompleted,
+  ) async {
+    if (isCompleted) return false;
+    final confirm = await showDialog(
+      context: context,
+      builder: (context) => ChangeNotifierProvider.value(
+        value: TasksNotifier(),
+        child: ConfirmPopup(),
+      ),
+    );
+    if (confirm) {
+      for (Task task in _tasks) {
+        if (task['id'] == id) {
+          task['isCompleted'] = true;
+        }
       }
+      notifyListeners();
+      if (context.mounted) setTasksToSharedPref(context);
     }
-    setTasksToSharedPref(context);
-    notifyListeners();
+    return confirm;
   }
 
   void getTasksFromSharedPref(BuildContext context) async {
@@ -148,7 +177,10 @@ class _LayoutState extends State<Layout> {
 
   @override
   Widget build(BuildContext context) {
-    TasksNotifier myProvider;
+    final TasksNotifier myProvider = Provider.of<TasksNotifier>(
+      context,
+      listen: false,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text('ToDo List'),
@@ -157,47 +189,52 @@ class _LayoutState extends State<Layout> {
         titleTextStyle: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 30,
-          color: Colors.green,
+          color: Colors.green[600],
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(5),
-        child: Column(
-          spacing: 10,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0, top: 5.0),
-              child: SearchEl(
-                controller: searchController,
-                handleChange: (value) => {searchQuery.value = value},
+
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          margin: EdgeInsets.all(5),
+          child: Column(
+            spacing: 10,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0, top: 5.0),
+                child: SearchEl(
+                  controller: searchController,
+                  handleChange: (value) => {searchQuery.value = value},
+                ),
               ),
-            ),
-            Provider.of<TasksNotifier>(context, listen: false).tasks.isNotEmpty
-                ? Expanded(
-                    child: ValueListenableBuilder(
-                      valueListenable: searchQuery,
-                      builder: (context, value, child) {
-                        return TasksList(searchQry: value);
-                      },
-                    ),
-                  )
-                : Center(
-                    child: Text(
-                      'Tap on + icon below to create new task',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.orange,
+              Provider.of<TasksNotifier>(
+                    context,
+                    listen: false,
+                  ).tasks.isNotEmpty
+                  ? Expanded(
+                      child: ValueListenableBuilder(
+                        valueListenable: searchQuery,
+                        builder: (context, value, child) {
+                          return TasksList(searchQry: value);
+                        },
+                      ),
+                    )
+                  : Center(
+                      child: Text(
+                        'Tap on + icon below to create new task',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.orange,
+                        ),
                       ),
                     ),
-                  ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: IconButton(
         onPressed: () => {
-          myProvider = Provider.of<TasksNotifier>(context, listen: false),
           showDialog(
             context: context,
             builder: (context) {
@@ -209,7 +246,7 @@ class _LayoutState extends State<Layout> {
             },
           ),
         },
-        icon: Icon(Icons.add_circle_outlined, size: 70, color: Colors.green),
+        icon: Icon(Icons.add_circle_outlined, size: 50, color: Colors.green),
         highlightColor: Color.fromARGB(255, 255, 171, 64),
         focusColor: Color.fromARGB(255, 7, 6, 6),
       ),
