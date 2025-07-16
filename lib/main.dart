@@ -67,11 +67,18 @@ class TasksNotifier extends ChangeNotifier {
   }
 
   void removeTask(BuildContext context, String id) async {
-    // Add conformation popup, will return true if confirmed
-    /*     final confirm = await showDialog(
-      context: context,
-      builder: (context) => ConfirmPopup(),
-    );
+    /* final completed = _tasks
+        .where((task) => task['id'] == id ? task['isCompleted'] : false)
+        .toList();
+
+    bool confirm = false;
+
+    if (!completed[0]['isCompleted']) {
+      confirm = await showDialog(
+        context: context,
+        builder: (context) => ConfirmPopup(),
+      );
+    }
     if (confirm) {
       _tasks.removeWhere((task) => task['id'] == id);
       notifyListeners();
