@@ -8,6 +8,6 @@ features :
    - Search through title and description
    - Mark tasks as Completed and delete afterwards
 
-![](Screenshots/01.png?raw=true)
+![](Screenshots/01.png?)
 
   
